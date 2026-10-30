@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+    <div class="overlay"></div>
+
+    <div class="center-wrapper">
+        <div class="hero-card">
+            <img src="/static/images/images.jpg" alt="Profile Picture" class="profile-pic">
+
+            <h1>My Website:></h1>
+            <p class="subtitle">My website application for DSA!</p>
+
+            <div class="btn-group">
+                <a href="/profile" class="btn btn-light">View Profile</a>
+                <a href="/works" class="btn btn-dark">Programming Works</a>
+                <a href="/contact" class="btn btn-accent">Contact Info</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

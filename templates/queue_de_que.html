@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue and Deque Operations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='queue_de_que.css') }}">
+</head>
+<body class="work-page queue_de_que-page">
+
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+
+    <div class="overlay"></div>
+
+    <main class="container queue-deque-container">
+        <div class="card queue-deque-card">
+
+            <h1 class="queue-deque-title">Queue and Deque Operations</h1>
+            <p class="queue-deque-subtitle">Linked List Data Structures</p>
+
+            {% if message %}
+                <div class="queue-message {{ message_type }}">
+                    {{ message }}
+                </div>
+            {% endif %}
+
+            <div class="queue-deque-grid">
+                <section class="queue-panel">
+                    <h3>Singly Linked Queue</h3>
+                    <p class="queue-description">First In, First Out (FIFO)</p>
+                    <span class="queue-count">{{ queue_values|length }} nodes</span>
+
+                    <div class="queue-display">
+                        {% if queue_values %}
+                            <span class="end-marker front-marker">← FRONT</span>
+                            {% for item in queue_values %}
+                                <div class="queue-node">{{ item }}</div>
+                            {% endfor %}
+                            <span class="end-marker rear-marker">REAR →</span>
+                        {% else %}
+                            <span class="end-marker front-marker">← FRONT</span>
+                            <span class="queue-empty">Queue is currently empty.</span>
+                            <span class="end-marker rear-marker">REAR →</span>
+                        {% endif %}
+                    </div>
+
+                    <form class="queue-form" method="POST"
+                          action="{{ url_for('queue_and_deque_bp.queue_de_que_page') }}">
+                        <label for="queue-value">Enqueue Node</label>
+                        <input type="text" id="queue-value" name="value"
+                               maxlength="100" placeholder="Enter value...">
+                        <div class="queue-buttons">
+                            <button type="submit" name="action" value="enqueue">Enqueue</button>
+                            <button type="submit" name="action" value="dequeue" class="remove-button">Dequeue</button>
+                            <button type="submit" name="action" value="clear_queue" class="clear-button">Clear Queue</button>
+                        </div>
+                    </form>
+                </section>
+                <section class="deque-panel">
+                    <h3>Doubly Linked Deque</h3>
+                    <p class="queue-description">Insert and remove from both ends</p>
+                    <span class="queue-count">{{ deque_values|length }} nodes</span>
+
+                    <div class="queue-display">
+                        {% if deque_values %}
+                            <span class="end-marker front-marker">← FRONT</span>
+                            {% for item in deque_values %}
+                                <div class="queue-node">{{ item }}</div>
+                            {% endfor %}
+                            <span class="end-marker rear-marker">REAR →</span>
+                        {% else %}
+                            <span class="end-marker front-marker">← FRONT</span>
+                            <span class="queue-empty">Deque is currently empty.</span>
+                            <span class="end-marker rear-marker">REAR →</span>
+                        {% endif %}
+                    </div>
+
+                    <form class="queue-form" method="POST"
+                          action="{{ url_for('queue_and_deque_bp.queue_de_que_page') }}">
+                        <label for="deque-front-value">Front Operations</label>
+                        <input type="text" id="deque-front-value" name="value"
+                               maxlength="100" placeholder="Enter value...">
+                        <div class="queue-buttons">
+                            <button type="submit" name="action" value="add_front">Add Front</button>
+                            <button type="submit" name="action" value="remove_front" class="remove-button">Remove Front</button>
+                        </div>
+                        <div class="rear-buttons-only">
+                            <div class="queue-buttons">
+                                <button type="submit" name="action" value="add_rear">Add Rear</button>
+                                <button type="submit" name="action" value="remove_rear" class="remove-button">Remove Rear</button>
+                                <button type="submit" name="action" value="clear_deque" class="clear-button">Clear Deque</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <a href="/works" class="queue-back">← Back to Works</a>
+        </div>
+    </main>
+</body>
+</html>

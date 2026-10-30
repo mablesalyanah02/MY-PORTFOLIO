@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programming Works</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="works-page">
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+    <div class="overlay"></div>
+
+    <div class="works-container">
+
+    <div class="works-header-box">
+        <h1 class="works-main-title">My Programming Works</h1>
+        <p class="works-subtitle">Select a project below:</p>
+    </div>
+
+        <div class="works-grid">
+            <div class="work-card">
+                <h3>Area Calculator</h3>
+                <p>Calculate the area of two different geometric shapes using those formulas.</p>
+                <a href="/area" class="explore-btn">CLICK</a>
+            </div>
+            <div class="work-card">
+                <h3>Uppercase Converter</h3>
+                <p>Convert lowercase letters and sentence to uppercase scenario .</p>
+                <a href="/touppercase" class="explore-btn">CLICK</a>
+            </div>
+            <div class="work-card">
+                <h3>Linked List</h3>
+                <p>Manage information using linked nodes that grow and shrink dynamically.</p>
+                <a href="/linklist" class="explore-btn">CLICK</a>
+            </div>
+            <div class="work-card">
+                <h3>Infix to Postfix</h3>
+                <p>Convert mathematical expressions from infix to postfix.</p>
+                <a href="/infixpostfix" class="explore-btn">CLICK</a>
+            </div>
+            <div class="work-card">
+                <h3>Queue & Deque</h3>
+                <p>Perform enqueue, dequeue, and double-ended operations using linked lists.</p>
+                <a href="/queueanddeque" class="explore-btn">CLICK</a>
+            </div>
+        </div>
+
+        <a href="/" class="back-btn">← Back to Home</a>
+    </div>
+</body>
+</html>

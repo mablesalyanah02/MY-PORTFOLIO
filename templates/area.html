@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Area Calculations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="area-page">
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+    <div class="overlay"></div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Area Calculations</h2>
+            <form method="POST">
+                <h3>Area of a Circle</h3>
+                <p style="text-align:left; font-style:italic; font-family: 'Times New Roman', Times, serif;">Formula: A = π × r²</p>
+                <label>Enter radius (r):</label>
+                <input type="number" step="any" name="radius" placeholder="Enter Radius....">
+                <button type="submit" name="calc_circle" class="btn">Calculate Circle</button>
+                {% if circle_result %}
+                <div class="result-box">
+                    Area of Circle = {{ "%.4f"|format(circle_result) }}
+                </div>
+                {% endif %}
+
+                <div class="divider"></div>
+
+                <h3>Area of a Triangle</h3>
+                <p style="text-align:left; font-style:italic; font-family: 'Times New Roman', Times, serif;">Formula: A = ½ × base × height</p>
+                <label>Enter base:</label>
+                <input type="number" step="any" name="base" value="{{ base or '' }}" placeholder="Enter Base....">
+                <label>Enter height:</label>
+                <input type="number" step="any" name="height" value="{{ height or '' }}" placeholder="Enter Height....">
+                <button type="submit" name="calc_triangle" class="btn-triangle">Calculate Triangle</button>
+                {% if triangle_result %}
+                <div class="result-box">
+                    Area of Triangle = {{ "%.4f"|format(triangle_result) }}
+                </div>
+                {% endif %}
+
+                <br><br>
+                <button type="submit" name="clear_all" class="btn">Clear All Results</button>
+            </form>
+
+            <br>
+            <a href="/works" class="back-btn">← Back to Works</a>
+        </div>
+    </div>
+</body>
+</html>
