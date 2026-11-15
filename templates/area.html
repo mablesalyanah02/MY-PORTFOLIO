@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Calculations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="area-page">
+
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+
+        <h1 class="area-title">Area Calculations</h1>
+
+        <div class="area-grid">
+
+            <div class="card">
+
+                <h2>Area of a Circle</h2>
+
+                <p style="text-align:left; font-style:italic;">
+                    Formula: A = π × r²
+                </p>
+
+                <form method="POST">
+
+                    <label>Enter radius (r):</label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="radius"
+                        placeholder="Enter Radius...."
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        name="calc_circle"
+                        class="btn">
+                        Calculate Circle
+                    </button>
+
+                </form>
+
+                {% if circle_result is not none and circle_result != '' %}
+                <div class="result-box">
+                    Area of Circle = {{ "%.4f"|format(circle_result) }}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <div class="card">
+
+                <h2>Area of a Triangle</h2>
+
+                <p style="text-align:left; font-style:italic;">
+                    Formula: A = ½ × base × height
+                </p>
+
+                <form method="POST">
+
+                    <label>Enter base:</label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="base"
+                        value="{{ base or '' }}"
+                        placeholder="Enter Base...."
+                        required
+                    >
+
+                    <label>Enter height:</label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="height"
+                        value="{{ height or '' }}"
+                        placeholder="Enter Height...."
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        name="calc_triangle"
+                        class="btn-triangle">
+                        Calculate Triangle
+                    </button>
+
+                </form>
+
+                {% if triangle_result is not none and triangle_result != '' %}
+                <div class="result-box">
+                    Area of Triangle = {{ "%.4f"|format(triangle_result) }}
+                </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="area-actions">
+
+            <form method="POST">
+                <button type="submit" name="clear_all" class="btn">
+                    Clear All Results
+                </button>
+            </form>
+
+            <a href="/works" class="back-btn">
+                ← Back to Works
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

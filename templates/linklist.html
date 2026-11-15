@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linked List Operations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="linklist-page">
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+    <div class="overlay"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Linked List Operations</h1>
+            <div class="status-bar">{{ status_msg }}</div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Node Value:</label>
+                    <input type="text" name="node_val" form="mainForm">
+                </div>
+                <div class="input-group">
+                    <label>Index (for Insert):</label>
+                    <input type="text" name="index_val" form="mainForm">
+                </div>
+            </div>
+
+            <form id="mainForm" method="POST">
+                <input type="hidden" name="node_val">
+                <input type="hidden" name="index_val">
+                <div class="btn-row">
+                    <button type="submit" name="action" value="prepend" class="btn prepend">Add to Beginning</button>
+                    <button type="submit" name="action" value="append" class="btn append">Add to End</button>
+                    <button type="submit" name="action" value="insert_at_index" class="btn insertIdx">Insert After</button>
+                    <button type="submit" name="action" value="search" class="btn search">Search Value</button>
+                    <button type="submit" name="action" value="delete_value" class="btn delVal">Delete Value</button>
+                    <button type="submit" name="action" value="pop_head" class="btn popHead">Delete Head</button>
+                    <button type="submit" name="action" value="pop_tail" class="btn popTail">Delete Tail</button>
+                    <button type="submit" name="action" value="clear" class="btn clear">Clear List</button>
+                </div>
+            </form>
+
+            <div class="visual-title">Linked List (Total Nodes: {{ total_nodes }})</div>
+            <div class="list-display">
+                <span class="head-box">HEAD</span>
+                <span class="arrow">→</span>
+                {% if items %}
+                    {% for item in items %}
+                        <span class="node-box">{{ item }}</span>
+                        <span class="arrow">→</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="empty-text">Linklist is currently empty!</span>
+                {% endif %}
+                <span class="null-box">TAIL</span>
+            </div>
+
+            <a href="/works" class="back-btn">← Back to Works</a>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('mainForm');
+        form.addEventListener('submit', function(e) {
+            form.querySelector('input[name="node_val"]').value = document.querySelector('input[name="node_val"]').value.trim();
+            form.querySelector('input[name="index_val"]').value = document.querySelector('input[name="index_val"]').value.trim();
+        });
+    </script>
+</body>
+</html>

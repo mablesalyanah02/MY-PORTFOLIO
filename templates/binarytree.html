@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Tree Operations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="binarytree-page">
+
+    <div class="binarytree-navbar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+
+    <main class="binarytree-container">
+
+        <div class="binarytree-heading">
+            <h1>Binary Tree Operations</h1>
+            <p>Explore node insertion, searching, deletion, and postorder traversal.</p>
+        </div>
+
+        <div class="binarytree-summary">
+            <div class="binarytree-summary-card">
+                <span>Total Nodes</span>
+                <strong>{{ node_count }}</strong>
+            </div>
+
+            <div class="binarytree-summary-card">
+                <span>Root Node</span>
+                <strong>{{ root_value if root_value is not none else 'None' }}</strong>
+            </div>
+
+            <div class="binarytree-summary-card">
+                <span>Tree Height</span>
+                <strong>{{ tree_height }}</strong>
+            </div>
+        </div>
+
+        <div class="binarytree-workspace">
+
+            <section class="binarytree-controls">
+
+                <div class="binarytree-panel">
+                    <h2>Insert Node</h2>
+                    <p>Add a new integer to the binary search tree.</p>
+
+                    <form method="POST" action="/binarytree">
+                        <label>Node Value</label>
+                        <input type="number" name="value" placeholder="Enter an integer" required>
+                        <button type="submit" name="action" value="insert" class="binarytree-btn red">Insert Node</button>
+                    </form>
+                </div>
+
+                <div class="binarytree-panel">
+                    <h2>Search Node</h2>
+                    <p>Find out whether a value exists in the tree.</p>
+
+                    <form method="POST" action="/binarytree">
+                        <label>Search Value</label>
+                        <input type="number" name="value" placeholder="Enter value to search" required>
+                        <button type="submit" name="action" value="search" class="binarytree-btn dark-red">Search Node</button>
+                    </form>
+                </div>
+
+                <div class="binarytree-panel">
+                    <h2>Delete Node</h2>
+                    <p>Remove a node while preserving the BST structure.</p>
+
+                    <form method="POST" action="/binarytree">
+                        <label>Node Value</label>
+                        <input type="number" name="value" placeholder="Enter value to delete" required>
+                        <button type="submit" name="action" value="delete" class="binarytree-btn red">Delete Node</button>
+                    </form>
+                </div>
+
+                <div class="binarytree-panel">
+                    <h2>Clear Tree</h2>
+                    <p>Remove all nodes and start a new tree.</p>
+
+                    <form method="POST" action="/binarytree">
+                        <button type="submit" name="action" value="clear" class="binarytree-btn clear">Clear All Nodes</button>
+                    </form>
+                </div>
+
+            </section>
+
+            <section class="binarytree-visual-panel">
+
+                <div class="binarytree-visual-title">
+                    <h2>Binary Search Tree Visualization</h2>
+                    <span>{{ node_count }} nodes</span>
+                </div>
+
+                <div class="binarytree-notification {{ message_type }}">
+                    {{ message }}
+                </div>
+
+                <div class="binarytree-canvas">
+
+                    {% if nodes %}
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="{{ diagram_width }}"
+                         height="{{ diagram_height }}"
+                         viewBox="0 0 {{ diagram_width }} {{ diagram_height }}">
+
+                        {% for edge in edges %}
+                        <line x1="{{ edge.x1 }}" y1="{{ edge.y1 }}"
+                              x2="{{ edge.x2 }}" y2="{{ edge.y2 }}"
+                              stroke="#b52b2b" stroke-width="3"/>
+                        {% endfor %}
+
+                        {% for node in nodes %}
+                        <circle cx="{{ node.x }}" cy="{{ node.y }}" r="28"
+                                fill="{% if node.value == highlighted %}#e66a22{% elif node.root %}#720000{% else %}#b00000{% endif %}"
+                                stroke="#f7cccc" stroke-width="3"/>
+
+                        <text x="{{ node.x }}" y="{{ node.y + 6 }}"
+                              fill="white" font-size="19" font-weight="bold"
+                              font-family="Times New Roman"
+                              text-anchor="middle">{{ node.value }}</text>
+                        {% endfor %}
+
+                    </svg>
+
+                    {% else %}
+
+                    <div class="binarytree-empty">
+                        <h3>Your Tree Is Empty</h3>
+                        <p>Insert a node to begin building your binary search tree.</p>
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="binarytree-traversal">
+                    <h3>Postorder Traversal</h3>
+                    <p>Left → Right → Root</p>
+                    <div class="binarytree-result">{{ postorder }}</div>
+                </div>
+
+                <div class="binarytree-traversal">
+                    <h3>Inorder Traversal</h3>
+                    <p>Left → Root → Right</p>
+                    <div class="binarytree-result">{{ inorder }}</div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <div class="binarytree-footer">
+            <a href="/works" class="binarytree-back">← Back to Works</a>
+        </div>
+
+    </main>
+
+</body>
+</html>
