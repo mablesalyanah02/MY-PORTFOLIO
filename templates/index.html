@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script>
+        if (sessionStorage.getItem("portfolioLoaded") === "true") {
+            document.documentElement.classList.add("skip-portfolio-loader");
+        }
+    </script>
+</head>
+
+<body class="home-page">
+
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-title">YNO</div>
+            <div class="loading-subtitle">MY PORTFOLIO</div>
+
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+
+            <div class="loading-message">
+                INITIALIZING PORTFOLIO...
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/works">Works</a>
+        <a href="/contact">Contact</a>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="center-wrapper">
+        <div class="hero-card">
+            <img src="{{ url_for('static', filename='images/images.jpg') }}"
+                 alt="Profile Picture"
+                 class="profile-pic">
+
+            <h1>My Website:></h1>
+            <p class="subtitle">My website application for DSA!</p>
+
+            <div class="btn-group">
+                <a href="/profile" class="btn btn-light">View Profile</a>
+                <a href="/works" class="btn btn-dark">Programming Works</a>
+                <a href="/contact" class="btn btn-accent">Contact Info</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loadingScreen = document.getElementById("loading-screen");
+
+        if (sessionStorage.getItem("portfolioLoaded") === "true") {
+            loadingScreen.style.display = "none";
+        } else {
+            window.addEventListener("load", function () {
+                const remaining = Math.max(0, 10000 - performance.now());
+
+                setTimeout(function () {
+                    loadingScreen.classList.add("hidden");
+                    sessionStorage.setItem("portfolioLoaded", "true");
+                }, remaining);
+            });
+        }
+    </script>
+
+</body>
+</html>
