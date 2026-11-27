@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithms | Spider-Man</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='8') }}">
+</head>
+<body class="sorting-page">
+    <header class="sorting-navbar">
+        <div class="sorting-logo">SPIDER-MAN</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/profile">Profile</a>
+            <a href="/works">Works</a>
+            <a href="/contact">Contact</a>
+        </nav>
+    </header>
+
+    <main class="sorting-container">
+        <div class="sorting-title">
+            <h1>Sorting Algorithms Visualizer</h1>
+            <p>Explore how different sorting algorithms arrange numbers through real-time visualization.</p>
+        </div>
+
+        <section class="sorting-section">
+            <div class="sorting-section-title">
+                <span class="sorting-number">01</span>
+                <h2>Array Setup</h2>
+            </div>
+            <form method="POST" class="sorting-array-form">
+                <div class="sorting-field">
+                    <label for="arrayInput">Enter Array Elements</label>
+                    <input type="text" id="arrayInput" name="array_input" value="{{ original_array | join(', ') }}" placeholder="Example: 42, 17, 8, 91, 23">
+                    <small>Enter 1 to 30 integers separated by commas.</small>
+                </div>
+                <div class="sorting-form-buttons">
+                    <button type="submit" name="action" value="set" class="sorting-btn red">Set Array</button>
+                    <button type="submit" name="action" value="random" class="sorting-btn dark-red">Randomize</button>
+                    <button type="submit" name="action" value="clear" class="sorting-btn outline">Clear</button>
+                </div>
+            </form>
+            {% if error %}
+            <div class="sorting-error">{{ error }}</div>
+            {% endif %}
+        </section>
+
+        <section class="sorting-section">
+            <div class="sorting-section-title">
+                <span class="sorting-number">02</span>
+                <h2>Choose Sorting Algorithm</h2>
+            </div>
+            <form method="POST" class="sorting-algorithm-form">
+                <div class="sorting-field">
+                    <label for="algorithm">Sorting Method</label>
+                    <select id="algorithm" name="algorithm">
+                        {% for key, name in algorithms.items() %}
+                        <option value="{{ key }}" {% if algorithm == key %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" name="action" value="run" class="sorting-btn red">▶ Run Sorting Algorithm</button>
+            </form>
+        </section>
+
+        <section class="sorting-section sorting-visual-section">
+            <div class="sorting-section-title">
+                <span class="sorting-number">03</span>
+                <h2>Sorting Visualization</h2>
+            </div>
+            <div class="sorting-visual-header">
+                <span>{{ algorithms.get(algorithm, "Bubble Sort") }}</span>
+                <span>{{ numbers | length }} Elements</span>
+            </div>
+            <div class="sorting-bar-chart" id="barChart">
+                {% for value in numbers %}
+                <div class="sorting-bar-column">
+                    <div class="sorting-bar-track">
+                        <div class="sorting-bar" style="height: {{ 5 + ((value | abs) / max_value * 85) }}%;">
+                            <span class="sorting-bar-value">{{ value }}</span>
+                        </div>
+                    </div>
+                    <div class="sorting-bar-index">Index {{ loop.index0 }}</div>
+                </div>
+                {% else %}
+                <div class="sorting-empty">No array elements to display.</div>
+                {% endfor %}
+            </div>
+            <div class="sorting-bar-legend">
+                <div class="sorting-legend-item">
+                    <span class="legend-color unsorted"></span>Unsorted
+                </div>
+                <div class="sorting-legend-item">
+                    <span class="legend-color comparing"></span>Active Elements
+                </div>
+                <div class="sorting-legend-item">
+                    <span class="legend-color sorted"></span>Sorted
+                </div>
+            </div>
+            <div class="sorting-speed-control">
+                <div class="sorting-speed-header">
+                    <label for="speed">Animation Speed</label>
+                    <span id="speedLabel">Normal</span>
+                </div>
+                <input type="range" id="speed" min="1" max="5" value="3">
+                <div class="sorting-speed-labels">
+                    <span>Slow</span>
+                    <span>Fast</span>
+                </div>
+            </div>
+            <div class="sorting-progress">
+                <div class="sorting-progress-header">
+                    <span>Sorting Progress</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="sorting-progress-track">
+                    <div class="sorting-progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <div class="sorting-current-array">
+                <span>Current Array:</span>
+                <div class="sorting-array-display" id="arrayDisplay">
+                    {% for value in numbers %}
+                    <div class="sorting-element">
+                        <div class="sorting-element-index">Index {{ loop.index0 }}</div>
+                        <div class="sorting-element-value">{{ value }}</div>
+                    </div>
+                    {% else %}
+                    <div class="sorting-empty">Empty Array</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="sorting-message">
+                <span class="sorting-message-label">EXECUTION TRACE</span>
+                <p id="executionMessage">Array initialized. Select an algorithm to begin.</p>
+            </div>
+            <div class="sorting-step-controls">
+                <button type="button" id="previousBtn" class="sorting-btn outline" onclick="previousStep()" disabled>← Previous</button>
+                <button type="button" id="playBtn" class="sorting-btn red" onclick="togglePlay()" disabled>▶ Play</button>
+                <button type="button" id="nextBtn" class="sorting-btn outline" onclick="nextStep()" disabled>Next →</button>
+                <button type="button" id="resetBtn" class="sorting-btn dark-red" onclick="resetSteps()" disabled>Reset Steps</button>
+            </div>
+            <div class="sorting-counter-wrapper">
+                <span class="sorting-step-counter" id="stepCounter">Step 0 of {{ steps | length }}</span>
+            </div>
+        </section>
+
+        <section class="sorting-section">
+            <div class="sorting-section-title">
+                <span class="sorting-number">04</span>
+                <h2>Sorting Statistics</h2>
+            </div>
+            <div class="sorting-stats">
+                <div class="sorting-stat-card">
+                    <span>Current Status</span>
+                    <strong id="statusValue">IDLE</strong>
+                </div>
+                <div class="sorting-stat-card">
+                    <span>Comparisons</span>
+                    <strong id="comparisonValue">0</strong>
+                </div>
+                <div class="sorting-stat-card">
+                    <span>Array Writes</span>
+                    <strong id="writesValue">0</strong>
+                </div>
+                <div class="sorting-stat-card">
+                    <span>Total Steps</span>
+                    <strong id="totalSteps">{{ steps | length }}</strong>
+                </div>
+            </div>
+        </section>
+        <div class="sorting-footer">
+            <a href="/works" class="sorting-btn dark-red">← Back to Works</a>
+        </div>
+    </main>
+
+    <script>
+        const steps = {{ steps | tojson }};
+        const maxValue = {{ max_value | tojson }};
+        const autoplay = {{ autoplay | tojson }};
+        let current = 0;
+        let playing = false;
+        let timer = null;
+
+        const barChart = document.getElementById("barChart");
+        const arrayDisplay = document.getElementById("arrayDisplay");
+        const speedInput = document.getElementById("speed");
+        const speedLabel = document.getElementById("speedLabel");
+        const playBtn = document.getElementById("playBtn");
+        const previousBtn = document.getElementById("previousBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const resetBtn = document.getElementById("resetBtn");
+
+        const delays = {1: 1500, 2: 1000, 3: 600, 4: 300, 5: 120};
+        const speedNames = {1: "Very Slow", 2: "Slow", 3: "Normal", 4: "Fast", 5: "Very Fast"};
+
+        function renderStep() {
+            if (!steps.length) return;
+            const step = steps[current];
+            const completed = current === steps.length - 1;
+            const bars = barChart.querySelectorAll(".sorting-bar");
+
+            step.array.forEach((value, index) => {
+                const bar = bars[index];
+                if (!bar) return;
+                bar.style.height = (5 + Math.abs(value) / maxValue * 85) + "%";
+                bar.classList.remove("is-active", "is-sorted");
+                if (step.sorted.includes(index)) {
+                    bar.classList.add("is-sorted");
+                } else if (step.active.includes(index)) {
+                    bar.classList.add("is-active");
+                }
+                bar.querySelector(".sorting-bar-value").textContent = value;
+            });
+
+            const elements = arrayDisplay.querySelectorAll(".sorting-element");
+            step.array.forEach((value, index) => {
+                const element = elements[index];
+                if (!element) return;
+                element.classList.remove("is-active", "is-sorted");
+                if (step.sorted.includes(index)) {
+                    element.classList.add("is-sorted");
+                } else if (step.active.includes(index)) {
+                    element.classList.add("is-active");
+                }
+                element.querySelector(".sorting-element-value").textContent = value;
+            });
+
+            document.getElementById("executionMessage").textContent = step.message;
+            document.getElementById("comparisonValue").textContent = step.comparisons;
+            document.getElementById("writesValue").textContent = step.writes;
+            document.getElementById("stepCounter").textContent = `Step ${current + 1} of ${steps.length}`;
+
+            const progress = Math.round(current / Math.max(steps.length - 1, 1) * 100);
+            document.getElementById("progressFill").style.width = progress + "%";
+            document.getElementById("progressText").textContent = progress + "%";
+
+            const status = document.getElementById("statusValue");
+            status.textContent = completed ? "DONE" : playing ? "RUNNING" : "PAUSED";
+            status.style.color = completed ? "#187b42" : "#a00000";
+
+            previousBtn.disabled = current === 0;
+            nextBtn.disabled = completed;
+            resetBtn.disabled = false;
+            playBtn.disabled = false;
+
+            if (completed) {
+                playing = false;
+                clearTimeout(timer);
+                timer = null;
+                playBtn.textContent = "↻ Replay";
+            } else {
+                playBtn.textContent = playing ? "Ⅱ Pause" : "▶ Resume";
+            }
+        }
+
+        function scheduleNext() {
+            clearTimeout(timer);
+            if (!playing) return;
+            timer = setTimeout(() => {
+                if (current < steps.length - 1) {
+                    current++;
+                    renderStep();
+                    if (playing) scheduleNext();
+                }
+            }, delays[speedInput.value]);
+        }
+
+        function startPlaying() {
+            if (!steps.length) return;
+            if (current === steps.length - 1) current = 0;
+            playing = true;
+            renderStep();
+            scheduleNext();
+        }
+
+        function pausePlaying() {
+            playing = false;
+            clearTimeout(timer);
+            timer = null;
+            renderStep();
+        }
+
+        function togglePlay() {
+            if (playing) {
+                pausePlaying();
+            } else {
+                startPlaying();
+            }
+        }
+
+        function nextStep() {
+            pausePlaying();
+            if (current < steps.length - 1) {
+                current++;
+                renderStep();
+            }
+        }
+
+        function previousStep() {
+            pausePlaying();
+            if (current > 0) {
+                current--;
+                renderStep();
+            }
+        }
+
+        function resetSteps() {
+            pausePlaying();
+            current = 0;
+            renderStep();
+        }
+
+        speedInput.addEventListener("input", () => {
+            speedLabel.textContent = speedNames[speedInput.value];
+            const duration = Math.min(delays[speedInput.value] * 0.7, 400);
+            barChart.style.setProperty("--animation-duration", duration + "ms");
+            if (playing) scheduleNext();
+        });
+
+        if (steps.length) {
+            renderStep();
+            if (autoplay) startPlaying();
+        }
+    </script>
+</body>
+</html>
